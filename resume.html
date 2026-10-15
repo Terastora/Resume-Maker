@@ -41,13 +41,13 @@
     --host-primary:#6f8cff; --host-secondary:#1d2128; --host-secondary-fg:#e8eaee;
     --host-success:#22c55e; --host-error:#ef4444;
   }
-  html,body{height:100%}
+  html,body{height:100%;overflow:hidden}
   body{margin:0;background:var(--host-bg);color:var(--host-fg);
        font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
   *{box-sizing:border-box}
 
-  #app{height:100vh;min-height:820px;display:flex;flex-direction:column;font-size:13px;color:var(--host-fg)}
-  .topbar{display:flex;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--host-border);background:var(--host-card);overflow-x:auto}
+  #app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;font-size:13px;color:var(--host-fg)}
+  .topbar{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--host-border);background:var(--host-card)}
   .brand{font-weight:600;font-size:13.5px;white-space:nowrap;display:flex;align-items:center;gap:7px;margin-right:auto}
   .brand i{width:8px;height:8px;border-radius:50%;background:var(--host-primary);display:inline-block}
   .btn{font:inherit;font-size:12px;padding:6px 11px;border-radius:7px;border:1px solid var(--host-border);background:var(--host-secondary);color:var(--host-secondary-fg);cursor:pointer;white-space:nowrap}
@@ -57,10 +57,40 @@
   .btn.mini{padding:2px 6px;font-size:11px;line-height:1.3}
   .btn:disabled{opacity:.6;cursor:default}
 
-  .workspace{flex:1;display:grid;grid-template-columns:360px 1fr;overflow:hidden;background:var(--host-bg)}
-  .editor{overflow-y:auto;padding:10px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--host-border)}
-  .editor::-webkit-scrollbar,.page-pane::-webkit-scrollbar{width:9px}
+  .workspace{flex:1 1 auto;min-height:0;display:grid;grid-template-columns:360px 1fr;overflow:hidden;background:var(--host-bg)}
+  .editor{min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-gutter:stable;
+          padding:10px;display:flex;flex-direction:column;gap:6px;border-right:1px solid var(--host-border)}
+  .editor::-webkit-scrollbar,.page-pane::-webkit-scrollbar{width:10px}
   .editor::-webkit-scrollbar-thumb,.page-pane::-webkit-scrollbar-thumb{background:var(--host-border);border-radius:9px}
+  .editor::-webkit-scrollbar-thumb:hover,.page-pane::-webkit-scrollbar-thumb:hover{background:var(--host-border-hover)}
+  html,body{height:100%;overflow:hidden}
+  body{margin:0;background:var(--host-bg);color:var(--host-fg);
+       font-family:Inter,system-ui,-apple-system,Segoe UI,sans-serif}
+  *{box-sizing:border-box}
+
+  #app{height:100vh;height:100dvh;display:flex;flex-direction:column;overflow:hidden;font-size:13px;color:var(--host-fg)}
+  .topbar{flex:0 0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:7px;padding:9px 12px;border-bottom:1px solid var(--host-border);background:var(--host-card)}
+  .brand{font-weight:600;font-size:13.5px;white-space:nowrap;display:flex;align-items:center;gap:7px;margin-right:auto}
+  .brand i{width:8px;height:8px;border-radius:50%;background:var(--host-primary);display:inline-block}
+  .btn{font:inherit;font-size:12px;padding:6px 11px;border-radius:7px;border:1px solid var(--host-border);background:var(--host-secondary);color:var(--host-secondary-fg);cursor:pointer;white-space:nowrap}
+  .btn:hover{border-color:var(--host-border-hover)}
+  .btn.primary{background:var(--host-primary);color:#fff;border-color:transparent;font-weight:500}
+  .btn.primary:hover{opacity:.92}
+  .btn.mini{padding:2px 6px;font-size:11px;line-height:1.3}
+  .btn:disabled{opacity:.6;cursor:default}
+
+  /* grid row clamped to the shell height; min-height:0 is what permits it */
+  .workspace{flex:1 1 0%;min-height:0;display:grid;grid-template-columns:360px 1fr;overflow:hidden;background:var(--host-bg)}
+
+  /* block layout: nothing can shrink-to-fit, so the panel really overflows */
+  .editor{display:block;height:100%;min-height:0;overflow-y:scroll;overscroll-behavior:contain;
+          scrollbar-gutter:stable;padding:10px;border-right:1px solid var(--host-border)}
+  .editor > *,.editor details.acc{flex:0 0 auto}
+  .editor details.acc{margin-bottom:6px}
+
+  .editor::-webkit-scrollbar,.page-pane::-webkit-scrollbar{width:10px}
+  .editor::-webkit-scrollbar-thumb,.page-pane::-webkit-scrollbar-thumb{background:var(--host-border);border-radius:9px}
+  .editor::-webkit-scrollbar-thumb:hover,.page-pane::-webkit-scrollbar-thumb:hover{background:var(--host-border-hover)}
   .editor::-webkit-scrollbar-track,.page-pane::-webkit-scrollbar-track{background:transparent}
 
   details.acc{border:1px solid var(--host-border);border-radius:8px;background:var(--host-card);overflow:hidden}
@@ -95,8 +125,9 @@
   .meter.bad i{background:var(--host-error)}
   .readout{font-size:11px;color:var(--host-fg-muted);display:flex;justify-content:space-between;gap:8px}
 
-  .page-pane{overflow-y:auto;overflow-x:hidden;padding:14px 18px 40px;background:var(--host-muted);display:flex;flex-direction:column;gap:10px}
-  .design-bar{display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:8px 9px;border:1px solid var(--host-border);border-radius:8px;background:var(--host-card);font-size:11px;position:sticky;top:0;z-index:5}
+  .page-pane{min-height:0;overflow:auto;overscroll-behavior:contain;
+             padding:8px 18px 40px;background:var(--host-muted)}
+  .design-bar{flex:0 0 auto;margin-bottom:6px;display:flex;flex-wrap:wrap;gap:7px;align-items:center;padding:6px 9px;border:1px solid var(--host-border);border-radius:8px;background:var(--host-card);font-size:11px;position:sticky;top:0;z-index:5}
   .design-bar .f{display:flex;flex-direction:column;gap:2px}
   .design-bar select{font-size:11px;padding:3px 5px;width:auto;min-width:78px}
   .pc{font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--host-border);color:var(--host-fg-muted);white-space:nowrap}
@@ -146,7 +177,7 @@
   .side .chip{background:#fff;border:1px solid #dfe1e6;border-radius:10px;padding:2px 7px;font-size:.76em;color:#3c4149}
   .side .lang{display:flex;justify-content:space-between;font-size:.8em;color:#3c4149;margin-bottom:2px;gap:8px}
   .side .lang span:last-child{color:#777}
-  .sec{margin-bottom:var(--secgap,16px);break-inside:avoid}
+  .sec{margin-bottom:calc(var(--secgap,16px)*0.6);break-inside:avoid}
   .sec-title{font-size:.86em;font-weight:700;letter-spacing:calc(1.8px*var(--track,1));text-transform:uppercase;color:var(--acc);margin:0 0 calc(var(--secgap,16px)*0.45);padding-bottom:2px;border-bottom:1px solid #dcdfe4}
   .sec-classic .sec-title{border-bottom:1.5px solid #1a1a1a;color:#1a1a1a}
   .sec-modern .sec-title{border-bottom:none;color:var(--acc);border-left:3px solid var(--acc);padding-left:8px}
@@ -176,9 +207,9 @@
   @media print{
     @page{size:A4 portrait;margin:0}
     .topbar,.design-bar,.editor,#overflowLine,#overflowTint,.status{display:none!important}
-    html,body{height:auto}
+    html,body{height:auto;overflow:visible}
     body{background:#fff}
-    #app{height:auto;min-height:0;display:block}
+    #app{height:auto;overflow:visible;display:block}
     .workspace{display:block;overflow:visible}
     .page-pane{padding:0;overflow:visible;background:#fff}
     #pageWrap{display:block}
@@ -307,7 +338,7 @@
               <input type="color" data-bind="design.accent">
             </div>
           </div>
-          <div><label class="lbl">Preview zoom</label><input type="range" min="0.6" max="1.8" step="0.05" data-bind="design.zoom"></div>
+          <div><label class="lbl">Page margin <span id="padOut">80%</span></label><input type="range" min="0.4" max="1.4" step="0.05" data-bind="design.padScale"></div>
         </div>
       </details>
     </aside>
@@ -361,7 +392,7 @@
       v: VER,
       design:{ template:'classic', font:'Inter, sans-serif', density:'normal', accent:'#2563eb', zoom:1,
                showPhoto:false, photo:null, photoSize:'2', photoShape:'square', photoPos:'left',
-               skillsLayout:'inline', fitK:0, autoFit:false, bodyCols:'1' },
+               skillsLayout:'inline', fitK:0, autoFit:false, bodyCols:'1', padScale:0.8 },
       titles: Object.assign({}, TITLES),
       mode:{ summary:'detailed', experience:'detailed', education:'detailed', projects:'detailed',
              skills:'simple', certifications:'simple', languages:'simple', awards:'simple' },
@@ -464,8 +495,9 @@
     page.style.setProperty('--lh', mix('lh').toFixed(3));
     page.style.setProperty('--secgap', mix('secgap').toFixed(2)+'px');
     page.style.setProperty('--entrygap', mix('entrygap').toFixed(2)+'px');
-    page.style.setProperty('--pady', Math.round(mix('pady'))+'px');
-    page.style.setProperty('--padx', Math.round(mix('padx'))+'px');
+    var ps = state.design.padScale || 1;
+    page.style.setProperty('--pady', Math.round(mix('pady')*ps)+'px');
+    page.style.setProperty('--padx', Math.round(mix('padx')*ps)+'px');
     page.style.setProperty('--h1s', mix('h1').toFixed(3)+'em');
     page.style.setProperty('--bidx', Math.round(mix('bidx'))+'px');
     page.style.setProperty('--track', mix('track').toFixed(3));
@@ -527,7 +559,7 @@
     $('#fillOut').textContent = Math.round(fill)+'% of a page';
     curFs = parseFloat(getComputedStyle($('#page')).fontSize);
     $('#typeOut').textContent = 'Type '+curFs.toFixed(1)+'px · '+(curFs*0.75).toFixed(1)+'pt';
-    $('#kOut').textContent = Math.round((state.design.fitK||0)*100)+'%';
+    $('#padOut').textContent = Math.round((state.design.padScale||1)*100)+'%';
     var pc = $('#pageCount');
     var pages = Math.max(1, Math.ceil((h-6)/PAGE_H));
     pc.textContent = pages===1 ? 'Fits 1 page' : pages+' pages';
@@ -675,10 +707,10 @@
     }
     if(t.dataset && t.dataset.bind){
       var b = t.dataset.bind;
-      var v = t.type==='checkbox' ? t.checked : ((b==='design.zoom'||b==='design.fitK') ? parseFloat(t.value) : t.value);
+      var v = t.type==='checkbox' ? t.checked : ((b==='design.zoom'||b==='design.fitK'||b==='design.padScale') ? parseFloat(t.value) : t.value);
       set(b, v);
       if(b==='design.zoom'){ fit(); updateHUD(); }
-      else if(b==='design.fitK'){ applyVars(); fit(); updateHUD(); }
+      else if(b==='design.fitK'||b==='design.padScale'){ applyVars(); fit(); updateHUD(); }
       else { renderPreview(); }
       syncQuick(); saveSoon();
     }
