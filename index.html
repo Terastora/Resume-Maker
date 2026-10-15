@@ -644,8 +644,8 @@
   var host = $('#sectionHost'), customHost = $('#customList');
 
   function sectionShell(key){
-    var detailed = state.mode[key] !== 'simple';
     var hasList = LISTS[key].fields.length > 0;
+    var detailed = hasList && state.mode[key] !== 'simple';
     var d = document.createElement('details');
     d.className='acc'; d.dataset.section=key;
     d.innerHTML =
@@ -661,7 +661,8 @@
               '<option value="bullets">Bulleted list</option>'+
               '<option value="columns">Bulleted, two columns</option></select></div>' : '')+
           '</div>' : '')+
-        '<div id="simple-'+key+'" hidden><label class="lbl">One item per line</label><textarea rows="6" data-bind="simple.'+key+'"></textarea></div>'+
+       '<div id="simple-'+key+'" hidden><label class="lbl">'+(key==='summary'?'Your profile text':'One item per line')+'</label>'+
+          '<textarea rows="6" data-bind="'+(key==='summary'?'personal.summary':'simple.'+key)+'"></textarea></div>'+
         '<div id="list-'+key+'"></div>'+
         '<button class="btn" data-add="'+key+'">+ Add entry</button>'+
         '<div class="hint" id="empty-'+key+'"></div>'+
